@@ -459,7 +459,18 @@ Forward simulation
 \end_layout
 
 \begin_layout Standard
-The forward recursion relating the state distribution vector of the likelihood an individual is in state 
+See for more information 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Mangel1988"
+literal "false"
+
+\end_inset
+
+,
+ pp.
+ 76 - 79.
+ The forward recursion relating the state distribution vector of the likelihood an individual is in state 
 \begin_inset Formula $\tau$
 \end_inset
 
@@ -468,33 +479,33 @@ The forward recursion relating the state distribution vector of the likelihood a
 \end_inset
 
  to fitness following an attack
-\begin_inset Formula $W^{\prime}\left(1\right)$
+\begin_inset Formula $F^{\prime}\left(1\right)$
 \end_inset
 
  is given by 
 \begin_inset Formula 
 \begin{align*}
-W^{\prime}\left(1\right) & =W\left(\tau\right)p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}\left[1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\left(1-\mu\right).
+F^{\prime}\left(1\right) & =F\left(\tau\right)p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}\left[1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\left(1-\mu\right).
 \end{align*}
 
 \end_inset
 
-The forward recursion relating fitness 
+The forward recursion relating the state distribution vector 
+\begin_inset Formula $F(\tau)$
+\end_inset
+
+ 
 \begin_inset Formula $\tau$
 \end_inset
 
- time steps since attack 
-\begin_inset Formula $W(\tau)$
-\end_inset
-
- to fitness following an attack
-\begin_inset Formula $W^{\prime}\left(1\right)$
+ time steps since attack to the state distribution vector following an attack
+\begin_inset Formula $F^{\prime}\left(1\right)$
 \end_inset
 
  is given by
 \begin_inset Formula 
 \begin{align*}
-W\left(\tau+1\right) & =W\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}\right]\left(1-\mu\right).
+F\left(\tau+1\right) & =F\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}\right]\left(1-\mu\right).
 \end{align*}
 
 \end_inset
@@ -502,7 +513,7 @@ W\left(\tau+1\right) & =W\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\ri
 The probability to die from predation is
 \begin_inset Formula 
 \begin{align*}
-p_{\mathrm{pred,death}} & =W\left(\tau\right)p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right).
+p_{\mathrm{pred,death}} & =F\left(\tau\right)p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right).
 \end{align*}
 
 \end_inset
@@ -518,7 +529,7 @@ The probability to die from damage is (note that
 )
 \begin_inset Formula 
 \begin{align*}
-p_{\mathrm{damage,death}} & =W\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\left(\mu-\mu_{0}\right).
+p_{\mathrm{damage,death}} & =F\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\left(\mu-\mu_{0}\right).
 \end{align*}
 
 \end_inset
@@ -526,7 +537,7 @@ p_{\mathrm{damage,death}} & =W\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\t
 The probability to die from background mortality is
 \begin_inset Formula 
 \begin{align*}
-p_{\mathrm{background,death}} & =W\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\mu_{0}.
+p_{\mathrm{background,death}} & =F\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\mu_{0}.
 \end{align*}
 
 \end_inset
