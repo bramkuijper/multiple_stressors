@@ -1,0 +1,1284 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage{fourier-otf}
+\usepackage{color}
+\definecolor{slateblue}{RGB}{22,88,143}
+\usepackage{doi}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children no
+\language english
+\language_package default
+\inputencoding auto-legacy
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize 12
+\spacing single
+\use_hyperref true
+\pdf_bookmarks true
+\pdf_bookmarksnumbered false
+\pdf_bookmarksopen false
+\pdf_bookmarksopenlevel 1
+\pdf_breaklinks true
+\pdf_pdfborder true
+\pdf_colorlinks true
+\pdf_backref false
+\pdf_pdfusetitle true
+\pdf_quoted_options "citecolor=slateblue,linkcolor=slateblue,urlcolor=slateblue"
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine natbib
+\cite_engine_type authoryear
+\biblio_style plainnat
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.5cm
+\topmargin 2.5cm
+\rightmargin 2.5cm
+\bottommargin 2.5cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Section
+Single-predator model
+\end_layout
+
+\begin_layout Subsection
+Probability of predator presence
+\end_layout
+
+\begin_layout Standard
+In the single predator model by 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Taborsky2021"
+literal "false"
+
+\end_inset
+
+,
+ the probability 
+\begin_inset Formula $p_{\mathrm{pred}}\left(\tau\right)$
+\end_inset
+
+ that one of the stressors is present at 
+\begin_inset Formula $\tau$
+\end_inset
+
+ time steps since the last attack is given by 
+\begin_inset Formula 
+\begin{align}
+p_{\mathrm{pred}}(\tau) & =\begin{cases}
+1-\lambda_{L} & \tau=1\\
+\frac{p_{\mathrm{pred}}\left(\tau-1\right)\left(1-p_{\mathrm{att}}\right)\left(1-\lambda_{L}\right)+\left(1-p_{\mathrm{pred}}\left(\tau-1\right)\right)\lambda_{A}}{1-p_{\mathrm{pred}}\left(\tau-1\right)p_{\mathrm{att}}} & \tau>1,
+\end{cases}\label{eq:taborsky_eq}
+\end{align}
+
+\end_inset
+
+where the first line reflects the probability that one time step 
+\begin_inset Formula $\tau=1$
+\end_inset
+
+ after the attack,
+ the predator is still present,
+ which happens with probability 
+\begin_inset Formula $1-\lambda_{L}$
+\end_inset
+
+ reflecting that the predator is not leaving.
+ 
+\end_layout
+
+\begin_layout Standard
+The second line reflects the probability that a predator is present 
+\begin_inset Formula $\tau>1$
+\end_inset
+
+ time steps after the attack.
+ Note that 
+\begin_inset Formula $p_{\mathrm{pred}}(\tau)$
+\end_inset
+
+ for 
+\begin_inset Formula $\tau>1$
+\end_inset
+
+ is a conditional probability,
+ as a more extensive way to write this is 
+\begin_inset Formula 
+\begin{align}
+p_{\mathrm{pred}}\left(\tau\right) & =\Pr\left(\text{predator present at }t=\tau\mid\text{no attack at }\tau-1\right),\label{eq:conditional_prob}
+\end{align}
+
+\end_inset
+
+because if there would have been an attack at time 
+\begin_inset Formula $\tau-1$
+\end_inset
+
+,
+ we would be back at the first line of eq.
+ (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:taborsky_eq"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ We use Bayes' theorem (e.g.,
+ see p.
+ 519 in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Otto2007"
+literal "false"
+
+\end_inset
+
+),
+ which exploits the fact that the joint probability 
+\begin_inset Formula $p(A,B)$
+\end_inset
+
+ of two outcomes 
+\begin_inset Formula $A,B$
+\end_inset
+
+ can be written as products of the underlying conditional probabilities and the corresponding marginal probabilities 
+\begin_inset Formula $p(A)$
+\end_inset
+
+,
+ or
+\begin_inset Formula 
+\begin{align*}
+p(A,B) & =p(A\mid B)p(B)=p(B\mid A)p(A)\\
+ & \Rightarrow p(A\mid B)=\frac{p(B\mid A)p(A)}{p\left(B\right)}.
+\end{align*}
+
+\end_inset
+
+Applying this to eq.
+ (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:conditional_prob"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+),
+ we have
+\begin_inset Formula 
+\begin{align*}
+ & \Pr\left(\text{predator present at }t=\tau\mid\text{no attack at }\tau-1\right)=\\
+ & \frac{\Pr\left(\text{no attack at }\tau-1\mid\text{predator present at }t=\tau\right)\Pr\left(\text{predator present at }t=\tau\right)}{\Pr\left(\text{no attack at }\tau-1\right)}.
+\end{align*}
+
+\end_inset
+
+Working out the numerator,
+ we start with 
+\begin_inset Formula $\Pr\left(\text{predator present at }t=\tau\right)$
+\end_inset
+
+.
+ There are two cases that result in a predator being present at time 
+\begin_inset Formula $t=\tau$
+\end_inset
+
+:
+ (i) the predator was already present 
+\begin_inset Formula $\tau-1$
+\end_inset
+
+ time steps since the last attack (
+\begin_inset Formula $p_{\mathrm{pred}}\left(\tau-1\right)$
+\end_inset
+
+) and did not leave,
+ so that we have 
+\begin_inset Formula $p_{\mathrm{pred}}\left(\tau-1\right)\left(1-\lambda_{L}\right)$
+\end_inset
+
+.
+ Alternatively,
+ (ii) the predator was not present 
+\begin_inset Formula $\tau-1$
+\end_inset
+
+ time steps since the last attack (
+\begin_inset Formula $1-p_{\mathrm{pred}}\left(\tau-1\right)$
+\end_inset
+
+) but just arrived,
+ so that we have 
+\begin_inset Formula $(1-p_{\mathrm{pred}}\left(\tau-1\right))\lambda_{A}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Next,
+ we work out 
+\begin_inset Formula $\Pr\left(\text{no attack at }\tau-1\mid\text{predator present at }t=\tau\right)$
+\end_inset
+
+.
+ For case (i),
+ the probability of not being attacked at time 
+\begin_inset Formula $\tau-1$
+\end_inset
+
+ is simply 
+\begin_inset Formula $1-p_{\mathrm{att}}$
+\end_inset
+
+ reflecting that the predator was present at time 
+\begin_inset Formula $\tau-1$
+\end_inset
+
+,
+ but did not attack.
+ For case (ii),
+ the probability of not being attacked at time 
+\begin_inset Formula $\tau-1$
+\end_inset
+
+ is 
+\begin_inset Formula $1$
+\end_inset
+
+ as the predator was absent at time 
+\begin_inset Formula $\tau-1$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Next we work out the numerator 
+\begin_inset Formula $\Pr\left(\text{no attack at }\tau-1\right)$
+\end_inset
+
+,
+ which is 
+\begin_inset Formula $1-\Pr\left(\text{attack at }\tau-1\right)$
+\end_inset
+
+,
+ where
+\begin_inset Formula 
+\begin{align*}
+\Pr\left(\text{attack at }\tau-1\right) & =p_{\mathrm{pred}}\left(\tau-1\right)p_{\mathrm{att}},
+\end{align*}
+
+\end_inset
+
+and we are done.
+\end_layout
+
+\begin_layout Subsection
+Fitness expression
+\end_layout
+
+\begin_layout Standard
+The expected fitness 
+\begin_inset Formula $W$
+\end_inset
+
+ of the prey animal if it expresses hormone level 
+\begin_inset Formula $h$
+\end_inset
+
+ at 
+\begin_inset Formula $\tau$
+\end_inset
+
+time steps since last having encountered a predator is then given by
+\begin_inset Formula 
+\begin{align}
+W\left(\tau\right) & =p_{\mathrm{pred}}\left(\tau\right)\cdot p_{\mathrm{att}}\cdot\left[1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\cdot\left(1-\mu\right)\cdot\left[r\left(h\left(\tau\right)\right)+W^{\prime}\left(1\right)\right]\nonumber \\
+ & +\left(1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}\right)\left(1-\mu\right)\left[r\left(h\left(\tau\right)\right)+W^{\prime}\left(\tau+1\right)\right].\label{eq:single_stressor_expression}
+\end{align}
+
+\end_inset
+
+Here the first line reflects a scenario where 
+\begin_inset Formula $\tau$
+\end_inset
+
+ time steps after the previous attack of the predator,
+ the predator is present and attacks (reflected by the probability 
+\begin_inset Formula $p_{\mathrm{pred}}\left(\tau\right)\cdot p_{\mathrm{att}}$
+\end_inset
+
+).
+ In case the predator kills the prey (with probability 
+\begin_inset Formula $p_{\mathrm{kill}}(h(\tau))$
+\end_inset
+
+),
+ the resulting fitness is 
+\begin_inset Formula $0$
+\end_inset
+
+.
+ By contrast,
+ when the prey survives the attack (with probability 
+\begin_inset Formula $1-p_{\mathrm{kill}}(h(\tau))$
+\end_inset
+
+) and also does not succumb to background mortality (with probability 
+\begin_inset Formula $1-\mu$
+\end_inset
+
+) it will produce 
+\begin_inset Formula $r(h(\tau))$
+\end_inset
+
+ offspring and have future fitness 
+\begin_inset Formula $W^{\prime}(1)$
+\end_inset
+
+:
+ it has now survived an attack so the prey's time since it has last encountered a predator is now 
+\begin_inset Formula $\tau=1$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+Alternatively,
+ the predator is not present or it does not attack,
+ with probability 
+\begin_inset Formula $1-p_{\mathrm{pred}}(\tau)+p_{\mathrm{\mathrm{pred}}}(\tau)\left(1-p_{\mathrm{att}}\right)=1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}$
+\end_inset
+
+ and if the prey survives background mortality it will produce 
+\begin_inset Formula $r(h(\tau))$
+\end_inset
+
+ offspring and have future fitness 
+\begin_inset Formula $W^{\prime}(\tau+1)$
+\end_inset
+
+,
+ because it is now 
+\begin_inset Formula $\tau+1$
+\end_inset
+
+ time steps ago that the prey has been attacked by a predator.
+\end_layout
+
+\begin_layout Subsection
+Forward simulation
+\end_layout
+
+\begin_layout Standard
+The forward recursion relating the state distribution vector of the likelihood an individual is in state 
+\begin_inset Formula $\tau$
+\end_inset
+
+ before an attack 
+\begin_inset Formula $F(\tau)$
+\end_inset
+
+ to fitness following an attack
+\begin_inset Formula $W^{\prime}\left(1\right)$
+\end_inset
+
+ is given by 
+\begin_inset Formula 
+\begin{align*}
+W^{\prime}\left(1\right) & =W\left(\tau\right)p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}\left[1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\left(1-\mu\right).
+\end{align*}
+
+\end_inset
+
+The forward recursion relating fitness 
+\begin_inset Formula $\tau$
+\end_inset
+
+ time steps since attack 
+\begin_inset Formula $W(\tau)$
+\end_inset
+
+ to fitness following an attack
+\begin_inset Formula $W^{\prime}\left(1\right)$
+\end_inset
+
+ is given by
+\begin_inset Formula 
+\begin{align*}
+W\left(\tau+1\right) & =W\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}\right]\left(1-\mu\right).
+\end{align*}
+
+\end_inset
+
+The probability to die from predation is
+\begin_inset Formula 
+\begin{align*}
+p_{\mathrm{pred,death}} & =W\left(\tau\right)p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right).
+\end{align*}
+
+\end_inset
+
+The probability to die from damage is (note that 
+\begin_inset Formula $\mu_{0}$
+\end_inset
+
+ is mortality when 
+\begin_inset Formula $d=0$
+\end_inset
+
+)
+\begin_inset Formula 
+\begin{align*}
+p_{\mathrm{damage,death}} & =W\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\left(\mu-\mu_{0}\right).
+\end{align*}
+
+\end_inset
+
+The probability to die from background mortality is
+\begin_inset Formula 
+\begin{align*}
+p_{\mathrm{background,death}} & =W\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\mu_{0}.
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Two-predator model
+\end_layout
+
+\begin_layout Standard
+In a two-predator scenario,
+ things get more complicated,
+ as predators can differ in their probabilities of appearance (denoted by 
+\begin_inset Formula $\lambda_{1,A}$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda_{2,A}$
+\end_inset
+
+) and departure (denoted by 
+\begin_inset Formula $\lambda_{1,L}$
+\end_inset
+
+ and 
+\begin_inset Formula $\lambda_{2,L}$
+\end_inset
+
+).
+ Moreover,
+ predators can also differ in their attack probabilities,
+ which we denote by 
+\begin_inset Formula $p_{1,\mathrm{att}}$
+\end_inset
+
+ and 
+\begin_inset Formula $p_{2,\mathrm{att}}$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+In a model with complete information,
+ prey can distinguish between attacks by predator 
+\begin_inset Formula $1$
+\end_inset
+
+ vs predator 
+\begin_inset Formula $2$
+\end_inset
+
+.
+ In that case,
+ fitness is a function of the number of time steps a predator has been attacked by either predator,
+ or 
+\begin_inset Formula $W\left(\tau_{1},\tau_{2}\right)$
+\end_inset
+
+.
+ However,
+ to fix ideas,
+ we consider a basic model,
+ in which the only thing that a prey can sense is the number of time steps 
+\begin_inset Formula $\tau$
+\end_inset
+
+ since it was attacked by 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+emph{any}
+\end_layout
+
+\end_inset
+
+ predator.
+ Hence,
+ fitness is simply a function of 
+\begin_inset Formula $\tau$
+\end_inset
+
+,
+ or
+\begin_inset Formula 
+\begin{align}
+W\left(\tau\right)= & p_{\mathrm{pred},12}\left(\tau\right)p_{\mathrm{survive,12}}\left(h\left(\tau\right)\right)\left(1-\mu\right)\left[r\left(h\left(\tau\right)\right)+W^{\prime}\left(1\right)\right]\nonumber \\
+ & +\sum_{i=1}^{2}p_{\mathrm{pred,}i}\left(\tau\right)p_{\mathrm{survive},i}\left(h\left(\tau\right)\right)\left(1-\mu\right)\left[r\left(h\left(\tau\right)\right)+W^{\prime}\left(1\right)\right]\nonumber \\
+ & +p_{\mathrm{pred},12}\left(\tau\right)\left(1-p_{\mathrm{att},1}\right)\left(1-p_{\mathrm{att},2}\right)\left(1-\mu\right)\left[r\left(h\left(\tau\right)\right)+W^{\prime}\left(\tau+1\right)\right].\nonumber \\
+ & +\sum_{i=1}^{2}p_{\mathrm{pred},i}\left(\tau\right)\left(1-p_{\mathrm{att},i}\right)\left(1-\mu\right)\left[r\left(h\left(\tau\right)\right)+W^{\prime}\left(\tau+1\right)\right]\nonumber \\
+ & +\left(1-p_{\mathrm{pred},1}\left(\tau\right)-p_{\mathrm{pred},2}\left(\tau\right)-p_{\mathrm{pred},12}\left(\tau\right)\right)\left(1-\mu\right)\left[r\left(h\left(\tau\right)\right)+W^{\prime}\left(\tau+1\right)\right]\label{eq:2predator:Wtau}
+\end{align}
+
+\end_inset
+
+The first line reflects fitness accrued when the prey is attacked by one or both predators,
+ given that both predators are currently present:
+ here,
+ 
+\begin_inset Formula $p_{\mathrm{pred},12}\left(\tau\right)$
+\end_inset
+
+ reflects the probability that 
+\begin_inset Formula $\tau$
+\end_inset
+
+ time steps since the last attack,
+ both predators 
+\begin_inset Formula $1$
+\end_inset
+
+ and 
+\begin_inset Formula $2$
+\end_inset
+
+ are present in the local patch and is developed in eqns.
+ (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ppred12_implicit"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+-
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ppred12:denominator"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+) below.
+ Next,
+ 
+\begin_inset Formula $p_{\mathrm{survive},12}(h(\tau))$
+\end_inset
+
+ (see eqns.
+ [
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:2predator:psurvive12"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+-
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:2predator:psurvive2"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+] below) reflects the probability that the prey expressing hormone level 
+\begin_inset Formula $h(\tau)$
+\end_inset
+
+ survives an attack by one or both predators,
+ conditional upon both predators being present in the patch.
+ A prey survives background mortality with probability 
+\begin_inset Formula $1-\mu$
+\end_inset
+
+,
+ in which case the prey produces 
+\begin_inset Formula $r(h(\tau))$
+\end_inset
+
+ offspring.
+ Moreover,
+ the prey itself goes on to accrue fitness 
+\begin_inset Formula $W^{\prime}(1)$
+\end_inset
+
+ in the next time step as 
+\begin_inset Formula $\tau$
+\end_inset
+
+ is now reset to 
+\begin_inset Formula $1$
+\end_inset
+
+ as the prey has just survived an attack.
+ 
+\end_layout
+
+\begin_layout Standard
+The second line reflects the probability that the prey survives an attack when only a single predator of type 
+\begin_inset Formula $i$
+\end_inset
+
+ is present,
+ where we sum over both possible types of predator.
+ A single predator of type 
+\begin_inset Formula $i$
+\end_inset
+
+ is present at time 
+\begin_inset Formula $\tau$
+\end_inset
+
+ with probability 
+\begin_inset Formula $p_{\mathrm{pred},i}(\tau)$
+\end_inset
+
+ (see eqns.
+ [
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ppred1:tau1"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+-
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ppred2:taularger1"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+]) Again,
+ after surviving the attack,
+ the prey produces 
+\begin_inset Formula $r(h(\tau))$
+\end_inset
+
+ offspring and then goes on to accrue fitness 
+\begin_inset Formula $W^{\prime}(1)$
+\end_inset
+
+ in the next time step.
+\end_layout
+
+\begin_layout Standard
+Lines three and four reflect scenarios in which one or both predators are present,
+ but do not attack the prey.
+ In this case the prey produces 
+\begin_inset Formula $r(h(\tau))$
+\end_inset
+
+ offspring and will have fitness 
+\begin_inset Formula $W^{\prime}(\tau+1)$
+\end_inset
+
+ in the next time step.
+ The final line reflects a scenario where the predators are absent.
+\end_layout
+
+\begin_layout Subsection
+Probabilities of predator presence/absence
+\end_layout
+
+\begin_layout Standard
+In contrast to the previous problem,
+ we now need to solve for the probabilities iteratively.
+\end_layout
+
+\begin_layout Paragraph
+Both predators present
+\end_layout
+
+\begin_layout Standard
+When 
+\begin_inset Formula $\tau=1$
+\end_inset
+
+,
+ necessarily minimally 1 predator was present during the previous time step,
+ so that the probability that both predators are present in the current time step is given by 
+\begin_inset Formula 
+\begin{align*}
+p_{\mathrm{pred},12}\left(1\right) & =\Pr\left(\text{pred 1 and 2 present at }\tau\mid\text{attack at }\tau-1\right)\\
+ & =\frac{\Pr\left(\text{attack at }\tau-1\mid\text{pred 1,2 present }\tau\right)\Pr\left(\text{pred 1,2 present }\tau\right)}{\Pr\left(\text{attack at }\tau-1\right)}\\
+ & =\left[\left(1-\lambda_{1,L}\right)\left(1-\lambda_{2,L}\right)\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred},12}\left(\tau-1\right)\left(p_{\mathrm{att},1}+p_{\mathrm{att},2}-p_{\mathrm{att},1}p_{\mathrm{att},2}\right)\right.\\
+ & +\left(1-\lambda_{1,L}\right)\lambda_{2,A}\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{att},1}p_{\mathrm{pred},1}\left(\tau-1\right)\\
+ & +\left.\lambda_{1,A}\left(1-\lambda_{2,L}\right)\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{att},2}p_{\mathrm{pred},2}\left(\tau-1\right)\right].\\
+ & \left/\Pr\left(\text{attack at }\tau-1\right)\right.,
+\end{align*}
+
+\end_inset
+
+where
+\begin_inset Formula 
+\begin{align*}
+\Pr\left(\mathrm{attack\ }\tau-1\right) & =\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred},12}\left(\tau-1\right)\left[p_{\mathrm{att,1}}+p_{\mathrm{att,2}}-p_{\mathrm{att},1}p_{\mathrm{att},2}\right]\\
+ & +\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred,1}}\left(\tau-1\right)p_{\mathrm{att},1}\\
+ & +\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred,2}}\left(\tau-1\right)p_{\mathrm{att},2}.
+\end{align*}
+
+\end_inset
+
+For the case where 
+\begin_inset Formula $\tau>1$
+\end_inset
+
+,
+ we have
+\begin_inset Formula 
+\begin{align}
+p_{\mathrm{pred},12}\left(\tau\right) & =\Pr\left(\text{pred 1 and 2 present at }\tau\mid\text{no attack at }\tau-1\right)\nonumber \\
+ & =\frac{\Pr\left(\text{no attack at }\tau-1\mid\text{pred 1,2 present }\tau\right)\Pr\left(\text{pred 1,2 present }\tau\right)}{\Pr\left(\text{no attack at }\tau-1\right)}\label{eq:ppred12_implicit}
+\end{align}
+
+\end_inset
+
+which we can write out as
+\begin_inset Formula 
+\begin{align}
+p_{\mathrm{pred},12}\left(\tau\right) & =\left[\left(1-p_{\mathrm{att},1}\right)\left(1-p_{\mathrm{att},2}\right)p_{\mathrm{pred},12}\left(\tau-1\right)\left(1-\lambda_{1,L}\right)\left(1-\lambda_{2,L}\right)\right.\nonumber \\
+ & +\left(1-p_{\mathrm{att},1}\right)p_{\mathrm{pred},1}\left(\tau-1\right)\left(1-\lambda_{1,L}\right)\lambda_{2,A}\nonumber \\
+ & +\left(1-p_{\mathrm{att},2}\right)p_{\mathrm{pred},2}\left(\tau-1\right)\lambda_{1,A}\left(1-\lambda_{2,L}\right)\nonumber \\
+ & +\left.\left(1-p_{\mathrm{pred},1}\left(\tau-1\right)-p_{\mathrm{pred},2}\left(\tau-1\right)-p_{\mathrm{pred},12}\left(\tau-1\right)\right)\lambda_{1,A}\lambda_{2,A}\right]\nonumber \\
+ & \left/\Pr\left(\text{no attack at }\tau-1\right)\right.\label{eq:ppred12:explicit}
+\end{align}
+
+\end_inset
+
+here the first line reflects that both predators were present at time 
+\begin_inset Formula $\tau-1$
+\end_inset
+
+ with probability 
+\begin_inset Formula $p_{\mathrm{pred},12}(\tau-1)$
+\end_inset
+
+,
+ did not attack with probability 
+\begin_inset Formula $(1-p_{\mathrm{att},1})(1-p_{\mathrm{att},2})$
+\end_inset
+
+ and then subsequently did not leave with probability 
+\begin_inset Formula $(1-\lambda_{1,L})(1-\lambda_{2,L})$
+\end_inset
+
+.
+ The second line reflects that predator 
+\begin_inset Formula $1$
+\end_inset
+
+ was present at time 
+\begin_inset Formula $\tau-1$
+\end_inset
+
+ with probability 
+\begin_inset Formula $p_{\mathrm{pred},12}(\tau-1)$
+\end_inset
+
+,
+ did not leave with probability 
+\begin_inset Formula $1-\lambda_{1,L}$
+\end_inset
+
+ and did not attack with probability 
+\begin_inset Formula $1-p_{\mathrm{att},1}$
+\end_inset
+
+ while predator 
+\begin_inset Formula $2$
+\end_inset
+
+ arrived with probability 
+\begin_inset Formula $\lambda_{2,A}$
+\end_inset
+
+.
+ The third line is similar to the second line,
+ except that it is predator 
+\begin_inset Formula $2$
+\end_inset
+
+ who was present at time 
+\begin_inset Formula $\tau-1$
+\end_inset
+
+ while predator 
+\begin_inset Formula $1$
+\end_inset
+
+ arrived,
+ while the fourth line reflects that neither predator is present at time 
+\begin_inset Formula $\tau-1$
+\end_inset
+
+,
+ but arrive with probability 
+\begin_inset Formula $\lambda_{1,A}\lambda_{2,A}$
+\end_inset
+
+.
+ Finally,
+ working out the denominator,
+ we have
+\begin_inset Formula 
+\begin{align}
+\Pr\left(\text{no attack at }\tau-1\right) & =p_{\mathrm{pred},12}\left(\tau-1\right)\left(1-p_{\mathrm{att,1}}\right)\left(1-p_{\mathrm{att,2}}\right)\nonumber \\
+ & +p_{\mathrm{pred,1}}\left(\tau-1\right)\left(1-p_{\mathrm{att},1}\right)\nonumber \\
+ & +p_{\mathrm{pred,2}}\left(\tau-1\right)\left(1-p_{\mathrm{att},2}\right)\nonumber \\
+ & +\left(1-p_{\mathrm{pred},1}\left(\tau-1\right)-p_{\mathrm{pred},2}\left(\tau-1\right)-p_{\mathrm{pred},12}\left(\tau-1\right)\right).\label{eq:ppred12:denominator}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Paragraph
+Predator 1 present
+\end_layout
+
+\begin_layout Standard
+Let us consider the recursion equation for predator 1.
+ When 
+\begin_inset Formula $\tau=1$
+\end_inset
+
+ (an attack took place during the previous time step),
+ we have
+\begin_inset Formula 
+\begin{align}
+p_{\mathrm{pred},1}\left(1\right) & =\left(1-\lambda_{1,L}\right)\lambda_{2,L}\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred,12}}\left(\tau-1\right)\left(p_{\mathrm{att},1}+p_{\mathrm{att},2}-p_{\mathrm{att,1}}p_{\mathrm{att},2}\right)\label{eq:ppred1:tau1}\\
+ & +\left(1-\lambda_{1,L}\right)\left(1-\lambda_{2,A}\right)\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred,1}}\left(\tau-1\right)p_{\mathrm{att},1}\\
+ & +\lambda_{1,A}\lambda_{2,L}\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred,2}}\left(\tau-1\right)p_{\mathrm{att},2}
+\end{align}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When 
+\begin_inset Formula $\tau>1$
+\end_inset
+
+,
+ we have according to the same logic as in eqns.
+ (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ppred12_implicit"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ppred12:explicit"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ppred12:denominator"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+)
+\begin_inset Formula 
+\begin{align}
+p_{\mathrm{pred},1}\left(\tau\right) & =\left[\left(1-p_{\mathrm{att},1}\right)\left(1-p_{\mathrm{att},2}\right)p_{\mathrm{pred,12}}\left(\tau-1\right)\left(1-\lambda_{1,L}\right)\lambda_{2,L}\right.\nonumber \\
+ & +\left(1-p_{\mathrm{att},1}\right)p_{\mathrm{pred},1}\left(\tau-1\right)\left(1-\lambda_{1,L}\right)\left(1-\lambda_{2,A}\right)\nonumber \\
+ & +\left(1-p_{\mathrm{att},2}\right)p_{\mathrm{pred},2}\left(\tau-1\right)\lambda_{1,A}\lambda_{2,L}\nonumber \\
+ & \left.+\left(1-p_{\mathrm{pred},1}\left(\tau-1\right)-p_{\mathrm{pred},2}\left(\tau-1\right)-p_{\mathrm{pred},12}\left(\tau-1\right)\right)\lambda_{1,A}\left(1-\lambda_{2,A}\right)\right]\nonumber \\
+ & \left/\Pr\left(\text{no attack at }\tau-1\right),\right.\label{eq:ppred1:taularger1}
+\end{align}
+
+\end_inset
+
+with the denominator given in eq.
+ (
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "eq:ppred12:denominator"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+Obviously,
+ similar logic applies when deriving 
+\begin_inset Formula $p_{\mathrm{pred},2}$
+\end_inset
+
+,
+ yielding
+\begin_inset Formula 
+\begin{align}
+p_{\mathrm{pred},2}\left(1\right) & =\lambda_{1,L}\left(1-\lambda_{2,L}\right)\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred,12}}\left(\tau-1\right)\left(p_{\mathrm{att},1}+p_{\mathrm{att},2}-p_{\mathrm{att,1}}p_{\mathrm{att},2}\right)\nonumber \\
+ & +\lambda_{1,L}\lambda_{2,A}\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred,1}}\left(\tau-1\right)p_{\mathrm{att},1}\nonumber \\
+ & +\left(1-\lambda_{1,A}\right)\left(1-\lambda_{2,L}\right)\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred,2}}\left(\tau-1\right)p_{\mathrm{att},2}\\
+p_{\mathrm{pred},2}\left(\tau\right) & =\left[\left(1-p_{\mathrm{att},1}\right)\left(1-p_{\mathrm{att},2}\right)p_{\mathrm{pred,12}}\left(\tau-1\right)\lambda_{1,L}\left(1-\lambda_{2,L}\right)\right.\nonumber \\
+ & +\left(1-p_{\mathrm{att},1}\right)p_{\mathrm{pred},1}\left(\tau-1\right)\lambda_{1,L}\lambda_{2,A}\nonumber \\
+ & +\left(1-p_{\mathrm{att},2}\right)p_{\mathrm{pred},2}\left(\tau-1\right)\left(1-\lambda_{1,A}\right)\left(1-\lambda_{2,L}\right)\nonumber \\
+ & \left.+\left(1-p_{\mathrm{pred},1}\left(\tau-1\right)-p_{\mathrm{pred},2}\left(\tau-1\right)-p_{\mathrm{pred},12}\left(\tau-1\right)\right)\left(1-\lambda_{1,A}\right)\lambda_{2,A}\right]\nonumber \\
+ & \left/\Pr\left(\text{no attack at }\tau-1\right).\right.\label{eq:ppred2:taularger1}
+\end{align}
+
+\end_inset
+
+Finally,
+ to make sure it all adds up,
+ we also derive the probability that 
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+emph{no}
+\end_layout
+
+\end_inset
+
+ predator is present at 
+\begin_inset Formula $\tau=1$
+\end_inset
+
+,
+ when it was necessarily present at 
+\begin_inset Formula $\tau=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{align*}
+p_{\text{no pred}}(1) & =\lambda_{1,L}\left(1-\lambda_{2,A}\right)\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred},1}\left(\tau-1\right)p_{\mathrm{att},1}\\
+ & +\left(1-\lambda_{1,A}\right)\lambda_{2,L}\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred},2}\left(\tau-1\right)p_{\mathrm{att},2}\\
+ & +\lambda_{1,L}\lambda_{2,L}\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred},12}\left(\tau-1\right)\left(p_{\mathrm{att,1}}+p_{\mathrm{att},2}-p_{\mathrm{att},1}p_{\mathrm{att},2}\right)
+\end{align*}
+
+\end_inset
+
+Hence,
+ 
+\begin_inset Formula $p_{\mathrm{pred},12}(1)+p_{\mathrm{pred,1}}(1)+p_{\mathrm{pred},2}(1)+p_{\text{no pred}}(1)$
+\end_inset
+
+ should sum to one.
+\end_layout
+
+\begin_layout Subsection
+Survival probabilities given one or both predators attack
+\end_layout
+
+\begin_layout Standard
+We have
+\begin_inset Formula 
+\begin{align}
+p_{\mathrm{survive},12}\left(h\left(\tau\right)\right) & =p_{\mathrm{att,1}}\cdot p_{\mathrm{att},2}\cdot\left(1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right)^{2}\nonumber \\
+ & +\left[p_{\mathrm{att},1}\left(1-p_{\mathrm{att},2}\right)+\left(1-p_{\mathrm{att,1}}\right)p_{\mathrm{att},2}\right]\left(1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right),\label{eq:2predator:psurvive12}\\
+p_{\mathrm{survive,}1}\left(h\left(\tau\right)\right) & =p_{\mathrm{att},1}\cdot\left(1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right)\label{eq:2predator:psurvive1}\\
+p_{\mathrm{survive,}2}\left(h\left(\tau\right)\right) & =p_{\mathrm{att},2}\cdot\left(1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right)\label{eq:2predator:psurvive2}
+\end{align}
+
+\end_inset
+
+where the first line of 
+\begin_inset Formula $p_{\mathrm{survive,12}}(h(\tau))$
+\end_inset
+
+ reflects the probability that both predators attack and the prey survives,
+ while the second line reflects that only one of both predators attack.
+ Note that in case neither predator attacks,
+ with probability 
+\begin_inset Formula $(1-p_{\mathrm{att,1}})(1-p_{\mathrm{att,}2})$
+\end_inset
+
+ 
+\begin_inset Formula $\tau$
+\end_inset
+
+ is not reset to 
+\begin_inset Formula $1$
+\end_inset
+
+,
+ so it does not feature.
+\end_layout
+
+\begin_layout Subsection
+Forward simulation
+\end_layout
+
+\begin_layout Standard
+More about a forward simulation can be found in 
+\begin_inset CommandInset citation
+LatexCommand citet
+key "Mangel1988"
+literal "false"
+
+\end_inset
+
+,
+ pp.
+ 76 - 79.
+ The previous backward simulation algorithm is used to find the decisions that maximize fitness.
+ Yet,
+ what does the model then predict about actual observations on the optimal sequence of decisions taken by an individual organism?
+ We cannot use the backward simulation for this,
+ as that is chiefly used to calculate the optimal decision,
+ rather than what is going on with a single individual.
+\end_layout
+
+\begin_layout Standard
+In a forward simulation,
+ we focus on the state distribution vector 
+\begin_inset Formula $F\left(\tau\right)$
+\end_inset
+
+ which describes the probability that an organism has been last attacked 
+\begin_inset Formula $\tau$
+\end_inset
+
+ time steps ago.
+ We can then relate the state distribution vector 
+\begin_inset Formula $F^{\prime}(\tau)$
+\end_inset
+
+ to the state distribution vector in the previous time step according to 
+\begin_inset Formula 
+\begin{align*}
+F^{\prime}\left(1\right) & =F\left(\tau\right)p_{\mathrm{pred,12}}\left(\tau\right)p_{\mathrm{att},1}p_{\mathrm{att},2}\left[1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]^{2}\left(1-\mu\right).\\
+ & +F\left(\tau\right)p_{\mathrm{pred,12}}\left(\tau\right)\left[\text{\left(1-p_{\mathrm{att},1}\right)p_{\mathrm{att},2}}+p_{\mathrm{att},1}\left(1-p_{\mathrm{att},2}\right)\right]\left[1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\left(1-\mu\right)\\
+ & +F\left(\tau\right)p_{\mathrm{pred},1}\left(\tau\right)p_{\mathrm{att},1}\left[1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\left(1-\mu\right)\\
+ & +F\left(\tau\right)p_{\mathrm{pred},2}\left(\tau\right)p_{\mathrm{att},2}\left[1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\left(1-\mu\right).
+\end{align*}
+
+\end_inset
+
+The forward recursion relating fitness 
+\begin_inset Formula $\tau$
+\end_inset
+
+ time steps since attack 
+\begin_inset Formula $W(\tau)$
+\end_inset
+
+ to fitness following an attack
+\begin_inset Formula $W^{\prime}\left(1\right)$
+\end_inset
+
+ is given by
+\begin_inset Formula 
+\begin{align*}
+F^{\prime}\left(\tau+1\right) & =F\left(\tau\right)p_{\mathrm{pred},12}\left(\tau\right)\left(1-p_{\mathrm{att},1}\right)\left(1-p_{\mathrm{att},2}\right)\left(1-\mu\right)\\
+ & +F\left(\tau\right)p_{\mathrm{pred},1}\left(\tau\right)\left(1-p_{\mathrm{att},1}\right)\left(1-\mu\right)\\
+ & +F\left(\tau\right)p_{\mathrm{pred},2}\left(\tau\right)\left(1-p_{\mathrm{att},2}\right)\left(1-\mu\right)\\
+ & +F\left(\tau\right)\left[1-\left(p_{\mathrm{pred},12}\left(\tau\right)+p_{\mathrm{pred,1}}\left(\tau\right)+p_{\mathrm{pred},2}\left(\tau\right)\right)\right]\left(1-\mu\right)
+\end{align*}
+
+\end_inset
+
+The probability to die from predation is
+\begin_inset Formula 
+\begin{align*}
+p_{\mathrm{pred,death}} & =F\left(\tau\right)p_{\mathrm{pred,12}}\left(\tau\right)p_{\mathrm{att,1}}p_{\mathrm{att},2}\left\{ 1-\left[1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]^{2}\right\} .\\
+ & +F\left(\tau\right)p_{\mathrm{pred,}1}\left(\tau\right)p_{\mathrm{att},1}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\\
+ & +F\left(\tau\right)p_{\mathrm{pred},2}\left(\tau\right)p_{\mathrm{att},2}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)
+\end{align*}
+
+\end_inset
+
+The probability to die from damage is (note that 
+\begin_inset Formula $\mu_{0}$
+\end_inset
+
+ is mortality when 
+\begin_inset Formula $d=0$
+\end_inset
+
+)
+\begin_inset Formula 
+\begin{align*}
+p_{\mathrm{damage,death}} & =F\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\left(\mu-\mu_{0}\right).
+\end{align*}
+
+\end_inset
+
+The probability to die from background mortality is
+\begin_inset Formula 
+\begin{align*}
+p_{\mathrm{background,death}} & =W\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\mu_{0}.
+\end{align*}
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+btprint "btPrintCited"
+bibfiles "~/Projects/databases/transgenerational"
+options "bram"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
