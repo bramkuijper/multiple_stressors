@@ -808,6 +808,18 @@ int main(int argc, char **argv)
 		outputfile << "A1;" << pArrive[0] << endl;
 		outputfile << "L2;" << pLeave[1] << endl;
 		outputfile << "A2;" << pArrive[1] << endl;
+		outputfile << "autocorr1;" << autocorr[0] << endl;
+		outputfile << "autocorr2;" << autocorr[1] << endl;
+		outputfile << "risk1;" << risk[0] << endl;
+		outputfile << "risk2;" << risk[1] << endl;
+		outputfile << "vanish_threshold;" << vanish_threshold << endl;
+		outputfile << "alpha;" << alpha << endl;
+		outputfile << "mu0;" << mu0 << endl;
+		outputfile << "hmin;" << hmin << endl;
+		outputfile << "maxD;" << maxD << endl;
+		outputfile << "maxI;" << maxI << endl;
+		outputfile << "maxT;" << maxT << endl;
+		outputfile << "maxH;" << maxH << endl;
 		outputfile << "K;" << K << endl;
 		outputfile << "r;" << repair << endl;
 		outputfile << "pAtt1;" << pAttack[0] << endl;
