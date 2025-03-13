@@ -191,7 +191,9 @@ void PredProb()
             prob_no_attack_tau_minus_1 = 
                 pPred[pred12][tau_idx - 1] * (1.0 - pAttack[pred1]) * (1.0 - pAttack[pred2]) +
                 pPred[pred1][tau_idx - 1] * (1.0 - pAttack[pred1]) +
-                pPred[pred2][tau_idx - 1] * (1.0 - pAttack[pred2]);
+                pPred[pred2][tau_idx - 1] * (1.0 - pAttack[pred2]) +
+                    (1.0 - pPred[pred1][tau_idx - 1] - 
+                     pPred[pred2][tau_idx - 1] - pPred[pred12][tau_idx - 1]);
 
             pPred[pred1][tau_idx] = ((1.0 - pAttack[pred1]) * (1.0 - pAttack[pred2]) *
                 pPred[pred12][tau_idx - 1] * (1.0 - pLeave[pred1]) * pLeave[pred2]
