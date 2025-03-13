@@ -17,6 +17,7 @@
 #include <vector>
 #include <algorithm>
 #include <chrono>
+#include <cassert>
 #include <string>
 
 
@@ -30,6 +31,10 @@ unsigned seed = rd();
 double pLeave[2]{0.0,0.0};   // probability that predator leaves
 double pArrive[2]{0.0,0.0};  // probability that predator arrives
 double pAttack[2]{0.25,0.5};     // probability that predator attacks if present
+
+double vanish_threshold{1e-06}; // threshold below we consider number solutions to be 0
+
+unsigned long max_t_solver{1000000}; // maximum time before we give up numerically solving things
 
 const double alpha    = 1.0;     // parameter controlling effect of hormone level on pKilled
 const double mu0      = 0.002;   // background mortality (independent of hormone level and predation risk)
@@ -51,7 +56,6 @@ const int skip        = 10;      // interval between print-outs
 ofstream outputfile;  // output file
 ofstream fwdCalcfile; // forward calculation output file
 ofstream attsimfile;  // simulated attacks output file
-stringstream outfile; // for naming output files
 
 // random numbers
 mt19937 mt(seed); // random number generator
@@ -100,7 +104,7 @@ void FinalFit()
 }
 
 enum pred {
-    pred1 = 0  // only pred 1
+    pred1 = 0,  // only pred 1
     pred2 = 1, // only pred 2 
     pred12 = 2 // both predators present
 };
@@ -119,14 +123,15 @@ void PredProb()
     for (unsigned long tau_idx = 1; 
             tau_idx <= maxT; ++tau_idx)
     {
-        sum_freq += pPred[pred1][tau] = init_freq;
-        sum_freq += pPred[pred2][tau] = init_freq;
-        sum_freq += pPred[pred12][tau] = init_freq;
+        sum_freq += pPred[pred1][tau_idx] = init_freq;
+        sum_freq += pPred[pred2][tau_idx] = init_freq;
+        sum_freq += pPred[pred12][tau_idx] = init_freq;
     }
+
+    assert(sum_freq >= 0.0 - vanish_threshold);
+    assert(sum_freq <= 1.0 + vanish_threshold) ;
         
     double attack_prev_timestep[3]{0.0,0.0,0.0};
-
-    double pPred_tplus1[3][maxT];
 
     // use an Eulerian solver to solve probabilities of predators
     // absent vs present
@@ -174,6 +179,9 @@ void PredProb()
                 + (1.0 - pLeave[pred1]) * pArrive[pred2] * attack_prev_timestep[pred1]
                 + pArrive[pred1] * (1.0 - pLeave[pred2]) * attack_prev_timestep[pred2]) / 
             prob_attack_tau_minus1;
+
+
+        assert(pPred[pred12][1] + pPred[pred1][1] + pPred[pred1][0] <= 1.0 + vanish_threshold);
                 
         double prob_no_attack_tau_minus_1;
 
@@ -194,16 +202,37 @@ void PredProb()
                 (1.0 - pAttack[pred2]) * pPred[pred2][tau_idx - 1] *
                     pArrive[pred1] * pLeave[pred2]
                 +
-                (1.0 - pPred[pred1][tau_idx - 1] - pPred[pred2][tau_idx] - 1] - pPred[pred12][tau_idx - 1]) * pArrive[pred1] * (1.0 - pArrive[pred2])) /
+                (1.0 - pPred[pred1][tau_idx - 1] - pPred[pred2][tau_idx - 1] - pPred[pred12][tau_idx - 1]) * pArrive[pred1] * (1.0 - pArrive[pred2])) /
                 prob_no_attack_tau_minus_1;
 
-            pPred[pred2][tau_idx] = ((1.0 - pAttack[pred1]) * (1.0 - pAttack[pred2]) * pPred[pred12][tau_idx - 1] * pLeave[pred1] * (1.0  - pLeave[pred2])
+            pPred[pred2][tau_idx] = (
+                    (1.0 - pAttack[pred1]) * (1.0 - pAttack[pred2]) * 
+                        pPred[pred12][tau_idx - 1] * pLeave[pred1] * (1.0  - pLeave[pred2])
                 +
-                (1.0 - pAttack[pred1]) * pPred[pred1][tau_idx - 1] * pLeave[pred1] * pArrive[pred2]
+                (1.0 - pAttack[pred1]) * pPred[pred1][tau_idx - 1] * 
+                    pLeave[pred1] * pArrive[pred2]
                 +
-                (1.0 - pAttack[pred2]) * pPred[pred2][tau_idx - 1] * (1.0 - pArrive[pred1]) * (1.0 - pLeave[pred2])) /
+                (1.0 - pAttack[pred2]) * pPred[pred2][tau_idx - 1] * 
+                    (1.0 - pArrive[pred1]) * (1.0 - pLeave[pred2])
+                +
+                (1.0 - pPred[pred1][tau_idx - 1] - pPred[pred2][tau_idx - 1] - pPred[pred12][tau_idx - 1]) *
+                    (1.0 - pArrive[pred1]) * pArrive[pred2]
+                    ) /
                 prob_no_attack_tau_minus_1;
-        }
+            // chek whether ppred 2 is totally finished, don't think so.
+
+            pPred[pred12][tau_idx] = (
+                    (1.0 - pAttack[pred1]) * (1.0 - pAttack[pred2]) * 
+                        pPred[pred12][tau_idx - 1] * (1.0 - pLeave[pred1]) * (1.0 - pLeave[pred2])
+                        +
+                        (1.0 - pAttack[pred1]) * pPred[pred1][tau_idx - 1] * (1.0 - pLeave[pred1]) * pArrive[pred2]
+                        +
+                        (1.0 - pAttack[pred2]) * pPred[pred2][tau_idx - 1] * pArrive[pred1] * (1.0 - pLeave[pred2])
+                        +
+                        (1.0 - pPred[pred1][tau_idx - 1] - pPred[pred2][tau_idx - 1] - pPred[pred12][tau_idx - 1]) * pArrive[pred1] * pArrive[pred2]
+                    ) / 
+                prob_no_attack_tau_minus_1;
+        } // end for tau_idx
 
         bool converged{true};
 
@@ -324,7 +353,7 @@ void OptDec()
 
   // calculate expected fitness as a function of t, h and d, before predator does/doesn't attack
   for (t=1;t<=maxT;t++) // note that W is undefined for t=0 because t=1 if predator has just attacked
-  
+  {
     for (d=0;d<=maxD;d++)
     {
       for (h=0;h<=maxH;h++)
@@ -348,7 +377,7 @@ void OptDec()
 
         // then calculate the actual fitness recursion
         
-        W[t][d][h] = pPred[pred12][t]*psurvive[pred12] * (1.0 - mu[d]) * (1.0 + (1.0 - ddec) * Wopt[0][d1] + ddec * Wopt[0][d2]) // survives attack by two predators
+        W[t][d][h] = pPred[pred12][t] * psurvive[pred12] * (1.0 - mu[d]) * (1.0 + (1.0 - ddec) * Wopt[0][d1] + ddec * Wopt[0][d2]) // survives attack by two predators
                     + pPred[pred1][t] * psurvive[pred1] * (1.0 - mu[d]) * (1.0 + (1.0 - ddec) * Wopt[0][d1] + ddec * Wopt[0][d2]) // prey survives pred1
                     + pPred[pred2][t] * psurvive[pred2] * (1.0 - mu[d]) * (1.0 + (1.0 - ddec) * Wopt[0][d1] + ddec * Wopt[0][d2]) // prey survives pred2
                     +
@@ -360,11 +389,10 @@ void OptDec()
                     +
                     (1.0 - pPred[pred1][t] - pPred[pred2][t] - pPred[pred12][t]) * (1.0 - mu[d]) * (1.0 + (1.0 - ddec) * Wopt[t][d1] + ddec * Wopt[t][d2]); // no attack
 
-      }
-    }
-  }
-
-}
+      } // end for h 
+    } // end for d
+  } // end for t
+} // optDec
 
 
 
@@ -443,11 +471,12 @@ void PrintParams()
 void fwdCalc(const string &base_name)
 {
   int t,d,h,d1,d2,h1,h2,i,age;
-  double ddec = 0.0;
-  double totSurv = 0.0;
-  double totPredDeaths = 0.0;
-  double totDamageDeaths = 0.0;
-  double totBkgrndDeaths = 0.0;
+  double ddec{0.0};
+  double totSurv{0.0};
+  double totPredDeaths{0.0};
+  double totDamageDeaths{0.0};
+  double totBkgrndDeaths{0.0};
+  double ppreddeath_tau{0.0};
 
   // note that F is undefined for t=0 because t=1 if predator has just attacked
   for (t=1;t<=maxT;t++) 
@@ -486,22 +515,66 @@ void fwdCalc(const string &base_name)
             // attack
             h1=hormone[0][d1];
 
-            Fnext[1][d1][h1] += 
-                F[t][d][h]*pPred[t]*pAttack*(1.0-pKilled[h])*(1.0-mu[d])*(1.0-ddec);
+            Fnext[1][d1][h1] += F[t][d][h] * (
+                pPred[pred12][t]*pAttack[pred1]*pAttack[pred2]*
+                (1.0-pKilled[h])*(1.0-pKilled[h])*(1.0-mu[d])
+                +
+                pPred[pred12][t]*((1-pAttack[pred1])*pAttack[pred2] + pAttack[pred1]*(1 - pAttack[pred2]))*(1.0 - pKilled[h]) * (1.0 - mu[d])
+                +
+                pPred[pred1][t]*pAttack[pred1]*(1.0 - pKilled[h]) * (1.0 - mu[d]) 
+                +
+                pPred[pred2][t]*pAttack[pred2]*(1.0 - pKilled[h]) * (1.0 - mu[d])
+                ) * (1.0 - ddec);
 
             h2=hormone[0][d2];
-            Fnext[1][d2][h2] += F[t][d][h]*pPred[t]*pAttack*(1.0-pKilled[h])*(1.0-mu[d])*ddec;
+            Fnext[1][d2][h2] += F[t][d][h] * (
+                pPred[pred12][t]*pAttack[pred1]*pAttack[pred2]*
+                (1.0-pKilled[h])*(1.0-pKilled[h])*(1.0-mu[d])
+                +
+                pPred[pred12][t]*((1-pAttack[pred1])*pAttack[pred2] + pAttack[pred1]*(1 - pAttack[pred2]))*(1.0 - pKilled[h]) * (1.0 - mu[d])
+                +
+                pPred[pred1][t]*pAttack[pred1]*(1.0 - pKilled[h]) * (1.0 - mu[d])
+                +
+                pPred[pred2][t]*pAttack[pred2]*(1.0 - pKilled[h]) * (1.0 - mu[d])
+                ) * ddec;
 
             // no attack
             h1=hormone[min(maxT,t+1)][d1];
-            Fnext[min(maxT,t+1)][d1][h1] += F[t][d][h]*(1.0-pPred[t]*pAttack)*(1.0-mu[d])*(1.0-ddec);
+            Fnext[min(maxT,t+1)][d1][h1] += F[t][d][h] * (
+                pPred[pred12][t]*(1.0 - pAttack[pred1])*(1.0 - pAttack[pred2])*(1.0-mu[d])
+                +
+                pPred[pred1][t]*(1.0 - pAttack[pred1])*(1.0 - mu[d])
+                +
+                pPred[pred2][t]*(1.0 - pAttack[pred2])*(1.0 - mu[d])
+                +
+                (1.0 - (pPred[pred12][t] + pPred[pred1][t] + pPred[pred2][t])) * (1.0 - mu[d])
+                ) * (1.0 - ddec);
+
             h2=hormone[min(maxT,t+1)][d2];
-            Fnext[min(maxT,t+1)][d2][h2] += F[t][d][h]*(1.0-pPred[t]*pAttack)*(1.0-mu[d])*ddec;
+            Fnext[min(maxT,t+1)][d2][h2] += F[t][d][h] * (
+                pPred[pred12][t]*(1.0 - pAttack[pred1])*(1.0 - pAttack[pred2])*(1.0-mu[d])
+                +
+                pPred[pred1][t]*(1.0 - pAttack[pred1])*(1.0 - mu[d])
+                +
+                pPred[pred2][t]*(1.0 - pAttack[pred2])*(1.0 - mu[d])
+                +
+                (1.0 - (pPred[pred12][t] + pPred[pred1][t] + pPred[pred2][t])) * (1.0 - mu[d])
+                ) * ddec;
+
+            ppreddeath_tau = 
+                    pPred[pred12][t]*pAttack[pred1]*pAttack[pred2]*(1.0 - (1.0 - pKilled[h]) * (1.0 - pKilled[h]))
+                    +
+                    pPred[pred12][t]*(pAttack[pred1]*(1.0 - pAttack[pred2]) + (1.0 - pAttack[pred1]* pAttack[pred2]))* pKilled[h]
+                    +
+                    pPred[pred1][t]*pAttack[pred1]*pKilled[h]
+                    +
+                    pPred[pred2][t]*pAttack[pred2]*pKilled[h];
             
             // deaths from predation and damage
-            predDeaths[i] += F[t][d][h]*pPred[t]*pAttack*pKilled[h];
-            damageDeaths[i] += F[t][d][h]*(1.0-pPred[t]*pAttack*pKilled[h])*(mu[d]-mu[0]);
-            bkgrndDeaths[i] += F[t][d][h]*(1.0-pPred[t]*pAttack*pKilled[h])*mu[0];
+            predDeaths[i] += F[t][d][h]*ppreddeath_tau;
+
+            damageDeaths[i] += F[t][d][h]*(1.0-ppreddeath_tau)*(mu[d]-mu[0]);
+            bkgrndDeaths[i] += F[t][d][h]*(1.0-ppreddeath_tau)*mu[0];
           }
         }
       }
@@ -564,21 +637,6 @@ void SimAttacks(const string &base_name)
   bool attack[100+1];
   double sumD[100+1],sumsqD[100+1],sumH[100+1],sumsqH[100+1],
     meanD[100+1],varD[100+1],meanH[100+1],varH[100+1]; // arrays for stats, from time step 0 to 100
-
-  ///////////////////////////////////////////////////////
-//  outfile.str("");
-//  outfile << "simAttacksL";
-//  outfile << std::fixed << pLeave;
-//  outfile << "A";
-//  outfile << std::fixed << pArrive;
-//  outfile << "K";
-//  outfile << std::fixed << K;
-//    outfile << "r";
-//    outfile << std::fixed << repair;
-//    outfile << "rep";
-//    outfile << std::fixed << replicate;
-//  outfile << ".txt";
-
 
   string attsimfilename = "simAttacks" + base_name;
     attsimfilename += ".txt";
@@ -710,45 +768,72 @@ void SimAttacks(const string &base_name)
 /* MAIN PROGRAM */
 int main(int argc, char **argv)
 {
-    double autocorr = atof(argv[1]);
-    double risk = atof(argv[2]);
-    repair = atof(argv[3]);
-    replicate = atoi(argv[4]);
-    pAttack = atof(argv[5]);
+    double autocorr[2]{0.0,0.0};
+    double risk[2]{0.0,0.0};
 
-        pLeave = (1.0 - autocorr)/(1.0+(risk/(1.0-risk)));
-        pArrive = 1.0 - pLeave - autocorr;
+    autocorr[0] = atof(argv[1]);
+    autocorr[1] = atof(argv[2]);
+    
+    risk[0] = atof(argv[3]);
+    risk[1] = atof(argv[4]);
 
-		///////////////////////////////////////////////////////
-		outfile.str("");
-		outfile << "L";
-		outfile << std::fixed << pLeave;
-		outfile << "A";
-		outfile << std::fixed << pArrive;
-		outfile << "K";
-		outfile << std::fixed << K;
-		outfile << "r";
-		outfile << std::fixed << repair;
-		outfile << "pAtt";
-		outfile << std::fixed << pAttack;
-        outfile << "rep";
-        outfile << std::fixed << replicate;
+    repair = atof(argv[5]);
 
-        string base_name = outfile.str();
+    assert(repair <= maxD);
+    replicate = atoi(argv[6]);
 
-		string outputfilename = "stress" + base_name;
+    pAttack[0] = atof(argv[7]);
+    pAttack[1] = atof(argv[8]);
+
+    std::string base_name{argv[9]};
+
+    // use autocorrelation and risk to calculate pLeave
+    // and pArrive for each predator
+    for (unsigned pred_idx{0}; pred_idx < 2; ++pred_idx)
+    {
+        pLeave[pred_idx] = (1.0 - autocorr[pred_idx])/
+            (1.0+(risk[pred_idx]/(1.0-risk[pred_idx])));
+
+        pArrive[pred_idx] = 1.0 - pLeave[pred_idx] - autocorr[pred_idx];
+    }
+
+		string outputfilename = base_name;
         outputfilename += ".txt";
 
 		outputfile.open(outputfilename.c_str());
-		///////////////////////////////////////////////////////
-
         outputfile << "Random seed: " << seed << endl; // write seed to output file
+		outputfile << "L1;" << pLeave[0] << endl;
+		outputfile << "A1;" << pArrive[0] << endl;
+		outputfile << "L2;" << pLeave[1] << endl;
+		outputfile << "A2;" << pArrive[1] << endl;
+		outputfile << "K;" << K << endl;
+		outputfile << "r;" << repair << endl;
+		outputfile << "pAtt1;" << pAttack[0] << endl;
+		outputfile << "pAtt2;" << pAttack[1] << endl;
+        outputfile << "rep;" << replicate << endl;
 
         FinalFit();
         PredProb();
+        
+        for (unsigned t_idx{0}; t_idx <= maxT; ++t_idx)
+        {
+            std::cout << "pPred1_" << t_idx << ";";
+            std::cout << "pPred2_" << t_idx << ";";
+            std::cout << "pPred12_" << t_idx << ";";
+        }
+
+        std::cout << std::endl;
+
+        for (unsigned t_idx{0}; t_idx <= maxT; ++t_idx)
+        {
+            std::cout << pPred[pred1][t_idx] << ";";
+            std::cout << pPred[pred2][t_idx] << ";";
+            std::cout << pPred[pred12][t_idx] << ";";
+        }
+
+        std::cout << std::endl;
 
         exit(1);
-
 
         Predation();
         Mortality();

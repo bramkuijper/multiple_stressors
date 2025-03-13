@@ -834,8 +834,12 @@ When
 \end_inset
 
 ,
- necessarily minimally 1 predator was present during the previous time step,
- so that the probability that both predators are present in the current time step is given by 
+ a minimum of one predator was present during the previous time step,
+ so that the probability 
+\begin_inset Formula $p_{\mathrm{pred},12}(1)$
+\end_inset
+
+ that both predators are present directly following an attack is given by 
 \begin_inset Formula 
 \begin{align*}
 p_{\mathrm{pred},12}\left(1\right) & =\Pr\left(\text{pred 1 and 2 present at }\tau\mid\text{attack at }\tau-1\right)\\
@@ -851,7 +855,7 @@ p_{\mathrm{pred},12}\left(1\right) & =\Pr\left(\text{pred 1 and 2 present at }\t
 where
 \begin_inset Formula 
 \begin{align*}
-\Pr\left(\mathrm{attack\ }\tau-1\right) & =\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred},12}\left(\tau-1\right)\left[p_{\mathrm{att,1}}+p_{\mathrm{att,2}}-p_{\mathrm{att},1}p_{\mathrm{att},2}\right]\\
+\Pr\left(\text{attack at }\tau-1\right) & =\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred},12}\left(\tau-1\right)\left[p_{\mathrm{att,1}}+p_{\mathrm{att,2}}-p_{\mathrm{att},1}p_{\mathrm{att},2}\right]\\
  & +\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred,1}}\left(\tau-1\right)p_{\mathrm{att},1}\\
  & +\sum_{\tau=2}^{\tau_{\mathrm{max}}}p_{\mathrm{pred,2}}\left(\tau-1\right)p_{\mathrm{att},2}.
 \end{align*}
@@ -1242,36 +1246,57 @@ F^{\prime}\left(\tau+1\right) & =F\left(\tau\right)p_{\mathrm{pred},12}\left(\ta
 
 \end_inset
 
-The probability to die from predation is
+To calculate the probability to die from predation,
+ we first calculate the conditional probability to survive,
+ given one is in state 
+\begin_inset Formula $\tau$
+\end_inset
+
+:
 \begin_inset Formula 
 \begin{align*}
-p_{\mathrm{pred,death}} & =F\left(\tau\right)p_{\mathrm{pred,12}}\left(\tau\right)p_{\mathrm{att,1}}p_{\mathrm{att},2}\left\{ 1-\left[1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]^{2}\right\} .\\
- & +F\left(\tau\right)p_{\mathrm{pred,}1}\left(\tau\right)p_{\mathrm{att},1}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\\
- & +F\left(\tau\right)p_{\mathrm{pred},2}\left(\tau\right)p_{\mathrm{att},2}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)
+\Pr\left(\text{pred,death}\mid\tau\right) & =p_{\mathrm{pred,12}}\left(\tau\right)p_{\mathrm{att,1}}p_{\mathrm{att},2}\left\{ 1-\left[1-p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]^{2}\right\} \\
+ & +p_{\mathrm{pred,12}}\left(\tau\right)\left[p_{\mathrm{att,1}}\left(1-p_{\mathrm{att},2}\right)+\left(1-p_{\mathrm{att},1}\right)p_{\mathrm{att},2}\right]p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\\
+ & +p_{\mathrm{pred,}1}\left(\tau\right)p_{\mathrm{att},1}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\\
+ & +p_{\mathrm{pred},2}\left(\tau\right)p_{\mathrm{att},2}p_{\mathrm{kill}}\left(h\left(\tau\right)\right).
 \end{align*}
 
 \end_inset
 
-The probability to die from damage is (note that 
+Consequently,
+ the total probability to die from predation is 
+\begin_inset Formula 
+\begin{align*}
+p_{\mathrm{pred,death}} & =F\left(\tau\right)\Pr\left(\text{pred,death}\mid\tau\right).
+\end{align*}
+
+\end_inset
+
+To calculate the probability to die from damage,
+ we have
+\begin_inset Formula 
+\begin{align*}
+p_{\mathrm{damage,death}} & =F\left(\tau\right)\left[1-\Pr\left(\text{pred,death}\mid\tau\right)\right]\left(\mu-\mu_{0}\right),
+\end{align*}
+
+\end_inset
+
+where 
 \begin_inset Formula $\mu_{0}$
 \end_inset
 
- is mortality when 
+ is the background mortality in case 
 \begin_inset Formula $d=0$
 \end_inset
 
-)
-\begin_inset Formula 
-\begin{align*}
-p_{\mathrm{damage,death}} & =F\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\left(\mu-\mu_{0}\right).
-\end{align*}
+.
+\end_layout
 
-\end_inset
-
+\begin_layout Standard
 The probability to die from background mortality is
 \begin_inset Formula 
 \begin{align*}
-p_{\mathrm{background,death}} & =W\left(\tau\right)\left[1-p_{\mathrm{pred}}\left(\tau\right)p_{\mathrm{att}}p_{\mathrm{kill}}\left(h\left(\tau\right)\right)\right]\mu_{0}.
+p_{\mathrm{background,death}} & =F\left(\tau\right)\left[1-\Pr\left(\text{pred,death}\mid\tau\right)\right]\mu_{0}.
 \end{align*}
 
 \end_inset
