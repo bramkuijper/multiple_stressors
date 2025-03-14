@@ -366,15 +366,16 @@ void OptDec()
 
         // first calculate probability of survival in case predators attack
 
-        // one or both predators attack
+        // survival in case one or both predators attack
         psurvive[pred12] = pAttack[pred1] * pAttack[pred2] * 
             (1.0 - pKilled[h]) * (1.0 - pKilled[h]) +
             (pAttack[pred1] * (1.0 - pAttack[pred2]) + (1.0 - pAttack[pred1]) * pAttack[pred2]) *
                 (1.0 - pKilled[h]);
 
-        // survival in the face of predator 1
+        // survival when predator 1 is present only
         psurvive[pred1] = pAttack[pred1] * (1.0 - pKilled[h]);
-        // survival in the face of predator 2
+
+        // survival when predator 2 is present only
         psurvive[pred2] = pAttack[pred2] * (1.0 - pKilled[h]);
 
         // then calculate the actual fitness recursion
@@ -844,10 +845,6 @@ int main(int argc, char **argv)
             std::cout << pPred[pred2][t_idx] << ";";
             std::cout << pPred[pred12][t_idx] << ";";
         }
-
-        std::cout << std::endl;
-
-        exit(1);
 
         Predation();
         Mortality();
