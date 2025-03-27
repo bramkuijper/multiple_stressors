@@ -6,3 +6,5 @@ The mathematica sheet `nstressor_math_check.nb` tests the numerical solutions of
 
 ## Dynamic programming code
 can be found in the file `src/dynamic_programming/stress_nstressors.cpp`. 
+
+## Other files
